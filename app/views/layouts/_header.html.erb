@@ -1,0 +1,31 @@
+<header>
+  <% if session[:user_id] %>
+	  <div class="log_out">
+	  	<%= link_to "Odhlásiť sa", log_out_path %>
+		</div>	
+		<div class="name">
+			<%= link_to session[:user_name], logged_path %>
+		</div>
+
+	<% else %>
+
+		<div class="log_out">
+	  	<%= link_to "Prihlásiť sa", log_in_path %>
+		</div>
+		<div class="log_out">
+	  	<%= link_to "Registrácia", sign_up_path %>
+		</div>
+
+  <% end %>
+
+  <div class="home">
+		<%= link_to "Hlavná stránka", root_path %>
+	</div>
+  <div class="home">
+		<%= link_to "Používatelia", users_path %>
+	</div>
+</header>
+
+<% flash.each do |name, msg| %>
+  <%= content_tag :div, msg, :id => "flash_#{name}" %>
+<% end %>
