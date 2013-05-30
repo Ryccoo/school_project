@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130421220801) do
+ActiveRecord::Schema.define(:version => 20130530143606) do
 
   create_table "groups", :force => true do |t|
     t.string   "name"
@@ -45,10 +45,10 @@ ActiveRecord::Schema.define(:version => 20130421220801) do
 
   create_table "users", :force => true do |t|
     t.string   "email"
-    t.string   "password_salt"
     t.string   "password_hash"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.string   "password_salt"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "first_name"
     t.string   "last_name"
     t.string   "country"
@@ -57,6 +57,10 @@ ActiveRecord::Schema.define(:version => 20130421220801) do
     t.string   "group"
     t.text     "description"
     t.datetime "last_login"
+    t.string   "provider"
+    t.integer  "uid"
+    t.string   "oauth_token"
+    t.datetime "oauth_expires_at"
   end
 
 end
