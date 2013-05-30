@@ -1,7 +1,11 @@
 SchoolBlog::Application.routes.draw do
   get "user_comments/index"
-
   get "home/index"
+
+
+  #Facebook routes
+  match 'auth/:provider/callback', to: 'sessions#create_by_fb'
+  match 'auth/failure', to: redirect('/')
 
   # Session routes
   get "log_in" => "sessions#new", as:"log_in"

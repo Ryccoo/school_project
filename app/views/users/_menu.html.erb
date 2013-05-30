@@ -10,9 +10,11 @@
 		<li>
 			<%= link_to "Upraviť profil",  logged_edit_path, :class=>cp(logged_edit_path) %>
 		</li>
+		<% if session[:provider] != "facebook" %>
 		<li>
 			<%= link_to "Zmeniť heslo",  logged_changepwd_path, :class=>cp(logged_changepwd_path) %>
 		</li>
+		<% end %>
 	</ul>
 </div>
 <% else %>

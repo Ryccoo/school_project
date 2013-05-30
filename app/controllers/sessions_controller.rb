@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
   	user = User.authenticate(params[:email], params[:password])
   	if user
     	session[:user_id] = user.id
+      session[:provider] = "WEB"
       session[:user_name] = user.first_name + " " + user.last_name
       session[:user_rights] = Group.get_rights(user.group)
       # puts session[:user_rights]
@@ -22,10 +23,20 @@ class SessionsController < ApplicationController
   	end
 	end
 
+  def create_by_fb
+    user = User.from_omniauth(env["omniauth.auth"])
+    session[:provider] = "facebook"
+    session[:user_rights] = Group.get_rights(user.group)
+    session[:user_id] = user.id
+    session[:user_name] = user.first_name + " " + user.last_name
+    redirect_to root_url, :notice => "Prihlásenie prebehlo úspešne"
+  end
+
 	def destroy
 		session[:user_id] = nil
     session[:user_name] = nil
     session[:user_rights] = nil
+    session[:provider] = nil
 		redirect_to root_url, :notice => "Odhlásenie prebehlo úspešne"
 	end
 end

@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   validates :password,    :presence => :true,
                           :confirmation => :true,
                           :if => :pass_required,
+                          :if => :not_fb_user,
                           :length => { :minimum => 8}
   
   validates :first_name,  :presence => :true
@@ -49,6 +50,13 @@ class User < ActiveRecord::Base
     self.new_record? or pass_change
   end
 
+  def not_fb_user
+    if self.provider=="facebook"
+      return false
+    end
+    return true
+  end
+
 
   def encrypt_password
     if password.present?
@@ -66,5 +74,20 @@ class User < ActiveRecord::Base
   		return nil
   	end
   end
+
+  def self.from_omniauth(auth)
+    where(auth.slice(:provider, :uid)).first_or_initialize.tap do |user|
+      user.provider = auth.provider
+      user.uid = auth.uid
+      # user.name = auth.info.name
+      user.first_name = auth.info.first_name
+      user.last_name = auth.info.last_name
+      user.oauth_token = auth.credentials.token
+      user.email = auth.info.email
+      user.oauth_expires_at = Time.at(auth.credentials.expires_at)
+      user.password_salt = BCrypt::Engine.generate_salt
+      user.save!
+  end
+end
 
 end
